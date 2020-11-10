@@ -1,0 +1,17 @@
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.exe
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.deps.json
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.runtimeconfig.json
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.runtimeconfig.dev.json
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.dll
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.pdb
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.OrTools.dll
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\Google.Protobuf.dll
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\google-ortools-native.dll
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\KakuroSolver.csprojAssemblyReference.cache
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\KakuroSolver.AssemblyInfoInputs.cache
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\KakuroSolver.AssemblyInfo.cs
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\KakuroSolver.csproj.CoreCompileInputs.cache
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\KakuroSolver.csproj.CopyComplete
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.dll
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\Google.OrTools.KakuroSolver.pdb
+C:\Users\Tim\Desktop\OR-Tools\or-tools_64bit\KakuroSolver\obj\Debug\netcoreapp3.1\KakuroSolver.genruntimeconfig.cache

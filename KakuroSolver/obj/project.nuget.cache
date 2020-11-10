@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "PC2d6/w8kp+TCd1SNCDiedr4kKQ/y7jLwENZT3YzdtXJMbS2u2Hs6o4bOrLpFONgMWxcgA8G4dhQE9P6hxNpAA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Tim\\Desktop\\OR-Tools\\or-tools_64bit\\KakuroSolver\\KakuroSolver.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Tim\\.nuget\\packages\\google.ortools\\8.0.8283\\google.ortools.8.0.8283.nupkg.sha512",
+    "C:\\Users\\Tim\\.nuget\\packages\\google.ortools.runtime.win-x64\\8.0.8283\\google.ortools.runtime.win-x64.8.0.8283.nupkg.sha512",
+    "C:\\Users\\Tim\\.nuget\\packages\\google.protobuf\\3.13.0\\google.protobuf.3.13.0.nupkg.sha512",
+    "C:\\Users\\Tim\\.nuget\\packages\\system.memory\\4.5.2\\system.memory.4.5.2.nupkg.sha512",
+    "C:\\Users\\Tim\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Google.OrTools.runtime.win-x64 8.0.8283' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Google.OrTools.runtime.win-x64",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
+}
