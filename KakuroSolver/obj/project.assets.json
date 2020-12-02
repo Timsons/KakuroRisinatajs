@@ -181,34 +181,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Tim\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\timur\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Tim\\Desktop\\OR-Tools\\or-tools_64bit\\KakuroSolver\\KakuroSolver.csproj",
+      "projectUniqueName": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
       "projectName": "Google.OrTools.KakuroSolver",
-      "projectPath": "C:\\Users\\Tim\\Desktop\\OR-Tools\\or-tools_64bit\\KakuroSolver\\KakuroSolver.csproj",
-      "packagesPath": "C:\\Users\\Tim\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Tim\\Desktop\\OR-Tools\\or-tools_64bit\\KakuroSolver\\obj\\",
+      "projectPath": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
+      "packagesPath": "C:\\Users\\timur\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Tim\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\timur\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Users\\Tim\\Desktop\\OR-Tools\\or-tools_64bit\\packages": {},
+        "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -220,6 +217,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Google.OrTools": {
             "target": "Package",
@@ -241,7 +239,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   },

@@ -1,8 +1,12 @@
 ﻿/*
  * Kakuro risinātājs ar OR-Tools palīdzību.
  * Autors: Timurs Sņetkovs ts18028
- * Versija v1.0.
+ * 
+ * Versija v1.0. Minimālais produkts. Uzrakstīts risinātājs ar OR-Tools metožu palīdzību vienai dotai mīklai. Pielietota instrukcija vietnēs saistībā ar OR-Tools
  * Datums: 10.11.2020.
+ * 
+ * Versija v1.1. .csv faila integrēšana - mīklas matrica glabājās programmā, summas glabājās atsevišķi, tās ir sakartotas secībā visas horizontālās -> visas vertikālās.
+ * Datums: 02.12.2020.
  * 
  * Par Kakuro (angliski): https://en.wikipedia.org/wiki/Kakuro
  * 
@@ -19,6 +23,7 @@
  * Projekts ir izveidots iekš OR-Tools instalētas programmatūras direktorijas, lai vienkāršāka pieeja funkcijām
 */
 using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,27 +60,131 @@ public class Kakuro
 
     private static void Solve()
     {
+        const char ListSeparator = ',';
+
         Solver solver = new Solver("Kakuro"); //Deklarē klasi, kurā ietilpst OR-Tools metodes
         /************* .CSV INTEGRĀCIJA *************/
-        /*
-        int counter = 0;
-        string line;
+
+        //Console.WriteLine("Enter file name:");
+        // string fileName = Console.ReadLine();
+
+        int rowCounter = 0;
+        int columnCounter = 1;
 
         // Read the file and display it line by line.  
-        System.IO.StreamReader file =
-            new System.IO.StreamReader(@"csvFile.csv");
-        while ((line = file.ReadLine()) != null)
+        string textFile =
+            new string(@"../../../csvFile.csv");// + fileName);
+        string[] lines = File.ReadAllLines(textFile);
+        //if (File.Exists(textFile))
+        //{
+        foreach (string line in lines)
         {
-            System.Console.WriteLine(line);
-            counter++;
+            Console.WriteLine(line);
+            rowCounter++;
         }
 
-        file.Close();
-        System.Console.WriteLine("There were {0} lines.", counter);
-        // Suspend the screen.  
-        System.Console.ReadLine();
+        foreach (char c in lines[0])
+            if (c == ListSeparator) columnCounter++; //svarīgi windows uzstādījumos (Control Panel - Region - Advanced - List Separator)
+        //}
+        //izveido teksta matricu, kur glabāsies .csv dati
+        string[][] stringMatrix = new string[rowCounter][];
+        for (int i = 0; i < stringMatrix.GetLength(0); i++)
+        {
+            stringMatrix[i] = new string[columnCounter];
+        }
+        Console.WriteLine();
+
+        //ievada .csv iekš matricas
+        for (int i = 0; i < rowCounter; i++)
+        {
+            string[] stringLine = lines[i].Split(",");
+            for (int j = 0; j < columnCounter; j++)
+            {
+                stringMatrix[i][j] = stringLine[j];
+            }
+        }
+
+        //horizontālo summu matrica, lai vēlāk kārtot summas H-V secībā, pa ceļam uzzinot koordinātas
+        int[,] horizontalSumMatrix = new int[rowCounter, columnCounter];
+        int[,] verticalSumMatrix = new int[rowCounter, columnCounter];
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                int position = stringMatrix[i][j].IndexOf(@"\");
+                if (position >= 0)
+                {
+                    string HorSubStr_ij = stringMatrix[i][j].Substring(0, position);
+                    if (HorSubStr_ij.Length != 0)
+                        horizontalSumMatrix[i, j] = int.Parse(HorSubStr_ij);
+                    string VerSubStr_ij = stringMatrix[i][j].Substring(position+1);
+                    if (VerSubStr_ij.Length != 0)
+                        verticalSumMatrix[i, j] = int.Parse(VerSubStr_ij);
+                }
+            }
+
+        }
         
+        //izraksta visas horizontālas summas un tad visas vertikālas
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                Console.Write(horizontalSumMatrix[i, j] + " ");
+            }
+            Console.WriteLine();//matricas nākamā rinda
+        }
+        Console.WriteLine();
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                Console.Write(verticalSumMatrix[i,j] + " ");
+            }
+            Console.WriteLine();//matricas nākamā rinda
+        }
+        //ieraksta summas vienā sarakstā, secībā H,V
+        List<int> sumList= new List<int>();
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if(horizontalSumMatrix[i, j]>0)
+                    sumList.Add(horizontalSumMatrix[i, j]);
+            }
+        }
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (verticalSumMatrix[i, j] > 0)
+                    sumList.Add(verticalSumMatrix[i, j]);
+            }
+        }
+        //pārbauda, vai saraksts ir pareizs
+        Console.WriteLine("Summas sarakstā: ");
+        foreach (int sum in sumList)
+        {
+            Console.Write(sum+" ");
+        }
+
+
+
+        Console.WriteLine();
+        Console.WriteLine("Failā {0} rindas un {1} kolonnas.", rowCounter, columnCounter);
+        Console.WriteLine();
+        /*
+        for (int i = 0; i < rowCounter; i++)
+        {
+
+            for (int j = 0; j < columnCounter; j++)
+            {
+                Console.Write(stringMatrix[i][j]);
+            }
+        }
+        Console.WriteLine();
         */
+
 
         /************* DOTS LAUKS: *************/
 
@@ -209,13 +318,12 @@ public class Kakuro
         Console.WriteLine();
 
         //Risinājuma statistika
-        Console.WriteLine("Solutions: {0}", solver.Solutions());
+        Console.WriteLine("Iespējamo risinājumu: {0}", solver.Solutions());
         Console.WriteLine("WallTime: {0}ms", solver.WallTime());
         Console.WriteLine("Failures: {0}", solver.Failures());
         Console.WriteLine("Branches: {0} ", solver.Branches());
-        
-        solver.EndSearch(); //svarīgi neaizmirst
 
+        solver.EndSearch(); //svarīgi neaizmirst
     }
 
     public static void Main(String[] args)

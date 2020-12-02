@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "PC2d6/w8kp+TCd1SNCDiedr4kKQ/y7jLwENZT3YzdtXJMbS2u2Hs6o4bOrLpFONgMWxcgA8G4dhQE9P6hxNpAA==",
+  "dgSpecHash": "9ETDe2/T3+il11cUR3VcuagHUCeks4v2HYzwKy9wtMsfxd12g5D/P0/kpSlcoJsdrS/PiadghfVjkU5ABXBN7g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Tim\\Desktop\\OR-Tools\\or-tools_64bit\\KakuroSolver\\KakuroSolver.csproj",
+  "projectFilePath": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Tim\\.nuget\\packages\\google.ortools\\8.0.8283\\google.ortools.8.0.8283.nupkg.sha512",
-    "C:\\Users\\Tim\\.nuget\\packages\\google.ortools.runtime.win-x64\\8.0.8283\\google.ortools.runtime.win-x64.8.0.8283.nupkg.sha512",
-    "C:\\Users\\Tim\\.nuget\\packages\\google.protobuf\\3.13.0\\google.protobuf.3.13.0.nupkg.sha512",
-    "C:\\Users\\Tim\\.nuget\\packages\\system.memory\\4.5.2\\system.memory.4.5.2.nupkg.sha512",
-    "C:\\Users\\Tim\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
+    "C:\\Users\\timur\\.nuget\\packages\\google.ortools\\8.0.8283\\google.ortools.8.0.8283.nupkg.sha512",
+    "C:\\Users\\timur\\.nuget\\packages\\google.ortools.runtime.win-x64\\8.0.8283\\google.ortools.runtime.win-x64.8.0.8283.nupkg.sha512",
+    "C:\\Users\\timur\\.nuget\\packages\\google.protobuf\\3.13.0\\google.protobuf.3.13.0.nupkg.sha512",
+    "C:\\Users\\timur\\.nuget\\packages\\system.memory\\4.5.2\\system.memory.4.5.2.nupkg.sha512",
+    "C:\\Users\\timur\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512"
   ],
   "logs": [
     {
