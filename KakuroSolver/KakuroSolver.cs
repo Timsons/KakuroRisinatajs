@@ -8,6 +8,9 @@
  * Versija v1.1. .csv faila integrēšana - mīklas matrica glabājās programmā, summas glabājās atsevišķi, tās ir sakartotas secībā visas horizontālās -> visas vertikālās.
  * Datums: 02.12.2020.
  * 
+ * Versija v1.2. Pilnveidota strādājoša saite ar .csv failu. paliek savienot ar esošo algoritmu-piemēru.
+ * Datums: 22.12.2020.
+ * 
  * Par Kakuro (angliski): https://en.wikipedia.org/wiki/Kakuro
  * 
  * Par OR-Tools: 
@@ -72,8 +75,7 @@ public class Kakuro
         int columnCounter = 1;
 
         // Read the file and display it line by line.  
-        string textFile =
-            new string(@"../../../csvFile.csv");// + fileName);
+        string textFile = new string(@"../../../Kakuro10x9.csv");// + fileName);
         string[] lines = File.ReadAllLines(textFile);
         //if (File.Exists(textFile))
         //{
@@ -107,6 +109,8 @@ public class Kakuro
         //horizontālo summu matrica, lai vēlāk kārtot summas H-V secībā, pa ceļam uzzinot koordinātas
         int[,] horizontalSumMatrix = new int[rowCounter, columnCounter];
         int[,] verticalSumMatrix = new int[rowCounter, columnCounter];
+        int horizontalSumCount = 0;
+        int verticalSumCount = 0;
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
@@ -114,17 +118,17 @@ public class Kakuro
                 int position = stringMatrix[i][j].IndexOf(@"\");
                 if (position >= 0)
                 {
-                    string HorSubStr_ij = stringMatrix[i][j].Substring(0, position);
+                    string HorSubStr_ij = stringMatrix[i][j].Substring(position + 1);
                     if (HorSubStr_ij.Length != 0)
                         horizontalSumMatrix[i, j] = int.Parse(HorSubStr_ij);
-                    string VerSubStr_ij = stringMatrix[i][j].Substring(position+1);
+                    string VerSubStr_ij = stringMatrix[i][j].Substring(0, position);
                     if (VerSubStr_ij.Length != 0)
                         verticalSumMatrix[i, j] = int.Parse(VerSubStr_ij);
                 }
             }
 
         }
-        
+
         //izraksta visas horizontālas summas un tad visas vertikālas
         for (int i = 0; i < rowCounter; i++)
         {
@@ -134,23 +138,27 @@ public class Kakuro
             }
             Console.WriteLine();//matricas nākamā rinda
         }
-        Console.WriteLine();
+        Console.WriteLine("Horizontālās summas OK\n");
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
             {
-                Console.Write(verticalSumMatrix[i,j] + " ");
+                Console.Write(verticalSumMatrix[i, j] + " ");
             }
-            Console.WriteLine();//matricas nākamā rinda
+            Console.WriteLine();
         }
+        Console.WriteLine("Vertikālās summas OK\n");
         //ieraksta summas vienā sarakstā, secībā H,V
-        List<int> sumList= new List<int>();
+        List<int> sumList = new List<int>();
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
             {
-                if(horizontalSumMatrix[i, j]>0)
+                if (horizontalSumMatrix[i, j] > 0)
+                {
                     sumList.Add(horizontalSumMatrix[i, j]);
+                    horizontalSumCount++;
+                }
             }
         }
         for (int i = 0; i < rowCounter; i++)
@@ -158,33 +166,268 @@ public class Kakuro
             for (int j = 0; j < columnCounter; j++)
             {
                 if (verticalSumMatrix[i, j] > 0)
+                {
                     sumList.Add(verticalSumMatrix[i, j]);
+                    verticalSumCount++;
+                }
             }
         }
         //pārbauda, vai saraksts ir pareizs
         Console.WriteLine("Summas sarakstā: ");
         foreach (int sum in sumList)
         {
-            Console.Write(sum+" ");
+            Console.Write(sum + " ");
         }
-
-
-
         Console.WriteLine();
-        Console.WriteLine("Failā {0} rindas un {1} kolonnas.", rowCounter, columnCounter);
-        Console.WriteLine();
-        /*
+
+        //izņem visas balto rūtiņu koordinātas
+        int[,] CellHorizontalSumLink = new int[rowCounter, columnCounter];
+        int[,] CellVerticalSumLink = new int[rowCounter, columnCounter];
         for (int i = 0; i < rowCounter; i++)
         {
-
             for (int j = 0; j < columnCounter; j++)
             {
-                Console.Write(stringMatrix[i][j]);
+                if (stringMatrix[i][j] == "") //ja ir balta
+                {
+                    //mainīgie, kurus varēs mainīt
+                    int i_var = i;
+                    int j_var = j;
+                    while ((horizontalSumMatrix[i_var, j_var] == 0) && (stringMatrix[i_var][j_var] == ""))
+                    {
+                        j_var--;
+                    }
+                    if (horizontalSumMatrix[i_var, j_var] != 0)
+                        CellHorizontalSumLink[i, j] = horizontalSumMatrix[i_var, j_var];
+                    //tagad 2D masīvā CellHorizontalSumLink katrās baltās rūtiņas koordinātās glabājās tās horizontālā summa.
+                }
+            }
+        }
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (stringMatrix[i][j] == "") //ja ir balta
+                {
+                    //mainīgie, kurus varēs mainīt
+                    int i_var = i;
+                    int j_var = j;
+                    while ((verticalSumMatrix[i_var, j_var] == 0) && (stringMatrix[i_var][j_var] == ""))
+                    {
+                        i_var--;
+                    }
+                    if (verticalSumMatrix[i_var, j_var] != 0)
+                        CellVerticalSumLink[i, j] = verticalSumMatrix[i_var, j_var];
+                    //tagad 2D masīvā CellVerticalSumLink katrās baltās rūtiņas koordinātās glabājās tās horizontālā summa.
+                }
+            }
+        }
+        //glabās summai piederošai rūtiņu skaitu sektorā (2 līdz 9)
+        List<int> sectorCellCountList = new List<int>();
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (CellHorizontalSumLink[i, j] > 0)
+                {
+                    //mainīgie, kurus varēs mainīt
+                    int cellCount = 0;
+                    int sumLink = CellHorizontalSumLink[i, j];
+                    
+                    bool doBreak = false;
+                    while (!doBreak)
+                    {
+                        if (sumLink == CellHorizontalSumLink[i, j])
+                        {
+                            cellCount++;
+                            if (j + 1 < columnCounter)
+                            {
+                                j++;
+                            }
+                            else doBreak = true;
+                        }
+                        else 
+                        { 
+                            doBreak = true;
+                            j--;
+                        }
+                    }
+                    sectorCellCountList.Add(cellCount);
+                }
+            }
+        }
+
+        /*for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (verticalSumMatrix[i, j] > 0)
+                {
+                    int cellCount = 0;
+                    int i_var = i;
+                    if (i_var + 1 < columnCounter)
+                    {
+                        do
+                        {
+                            i_var++;
+                            cellCount++;
+                        }
+                        while ((stringMatrix[i_var][j] == "") && (i_var + 1 < columnCounter));
+                        sectorCellCountList.Add(cellCount);
+                    }
+                }
+            }
+        }*/
+        for (int j = 0; j < columnCounter; j++)
+        {
+            for (int i = 0; i < rowCounter; i++)
+            {
+                if (CellVerticalSumLink[i, j] > 0)
+                {
+                    //mainīgie, kurus varēs mainīt
+                    //Console.WriteLine("We are at {0} column and found first white cell on {1} row", j, i);
+                    int cellCount = 0;
+                    int sumLink = CellVerticalSumLink[i, j];
+
+                    bool doBreak = false;
+                    while (!doBreak)
+                    {
+                        if (sumLink == CellVerticalSumLink[i, j])
+                        {
+                            cellCount++;
+                            if (i + 1 < rowCounter)
+                            {
+                                i++;
+                            }
+                            else doBreak = true;
+                        }
+                        else
+                        {
+                            doBreak = true;
+                            i--;
+                        }
+                    }
+                    //Console.WriteLine("We are at {0} column and end on {1} row", j, i);
+                    sectorCellCountList.Add(cellCount);
+                }
+            }
+        }
+        List<int> WhiteCellCoordinatesInOrder = new List<int>();
+        //pievieno sarakstam tikai visas baltas koordinātas secībā. Šeit tikai horizontālās, pēc tam vertikālās
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (CellHorizontalSumLink[i, j] != 0)
+                {
+                    WhiteCellCoordinatesInOrder.Add(i);
+                    WhiteCellCoordinatesInOrder.Add(j);
+                }
+            }
+        }
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (CellVerticalSumLink[i, j] != 0)
+                {
+                    WhiteCellCoordinatesInOrder.Add(i);
+                    WhiteCellCoordinatesInOrder.Add(j);
+                }
             }
         }
         Console.WriteLine();
-        */
+        Console.WriteLine("Failā {0} rindas un {1} kolonnas, {2} horizontālas un {3} vertikālas summas", rowCounter, columnCounter, horizontalSumCount, verticalSumCount);
+        Console.WriteLine("Kopā ir {0} baltas koordinātas\n", WhiteCellCoordinatesInOrder.Count);
+        //pārbauda balto rūtiņu piesaisti pie summas
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                Console.Write(CellHorizontalSumLink[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("horizontalSumLink OK\n");
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                Console.Write(CellVerticalSumLink[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("verticalSumLink OK\n");
 
+        foreach (int sector in sectorCellCountList)
+        {
+            Console.Write(sector + " ");
+        }
+        Console.WriteLine();
+        Console.WriteLine("sectors NOT OK\n"); 
+
+        int sumCount = sumList.Count;
+        int[][] problem_autoFill = new int[sumCount][];
+        int coordinatesWalker = 0;
+        //visas vertikālās rindas problēmā. šajā sintaksē ir vienkāršākais veids pielagoties OR-Tools metodēm, nododot datus. 
+         for (int i = 0; i < horizontalSumCount; i++)
+        {
+            problem_autoFill[i] = new int[2 * sectorCellCountList[i] + 1];
+            problem_autoFill[i][0] = sumList[i];
+            for (int j = 1; j < problem_autoFill[i].Length; j++)
+            {
+                problem_autoFill[i][j] = WhiteCellCoordinatesInOrder[coordinatesWalker];
+                coordinatesWalker++;
+            }
+        }
+        //visas vertikālas rindas problēmā
+        for (int i = horizontalSumCount; i < sumCount; i++)
+        {
+            problem_autoFill[i] = new int[2 * sectorCellCountList[i] + 1];
+            problem_autoFill[i][0] = sumList[i];
+            for (int j = 1; j < problem_autoFill[i].Length; j++)
+            {
+                problem_autoFill[i][j] = WhiteCellCoordinatesInOrder[coordinatesWalker];
+                coordinatesWalker++;
+            }
+        }
+        //visi tukšumi
+        int blanksCount = 0;
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (stringMatrix[i][j] == "x")
+                    blanksCount++;
+            }
+        }
+        int[,] blanksCoordinatesArray = new int[blanksCount,2];
+        int blankRows = 0;
+        int blankCols = 0;
+        for (int i = 0; i < rowCounter; i++)
+        {
+            for (int j = 0; j < columnCounter; j++)
+            {
+                if (stringMatrix[i][j] == "x")
+                {
+                    blanksCoordinatesArray[blankRows, blankCols] = i;
+                    blankCols++;
+                    blanksCoordinatesArray[blankRows, blankCols] = j;
+                    blankCols--;
+                    blankRows++;
+                }
+            }
+        }
+        Console.WriteLine("Blanks:");
+        for (int i = 0; i < blanksCount; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                Console.Write(blanksCoordinatesArray[i, j]+" ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("Blanks OK\n");
+        
 
         /************* DOTS LAUKS: *************/
 
