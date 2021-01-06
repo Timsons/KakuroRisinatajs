@@ -42,10 +42,10 @@ public class Kakuro
 {
 
     const char ListSeparator = ',';
-    const string FileName = "Kakuro29x29.csv"; //29x29 neatrisināja pa 839 minūtēm, 14x14Mul vairāki risinājumi
+    const string FileName = "Kakuro10x9.csv";
     const string BlankSymbol = "x";
 
-    
+
     /*
      * Funkcija izveido ierobežojumus
      */
@@ -63,33 +63,37 @@ public class Kakuro
 
         // izveido ierobežojumu, lai skaitļu summa ir vienāda ar doto mīklā
         solver.Add((from i in Enumerable.Range(0, len)
-                    select matrix[cellCoordinateArray[i * 2] - 1, cellCoordinateArray[i * 2 + 1] - 1])
-                    .ToArray().Sum() == result);
+            select matrix[cellCoordinateArray[i * 2] - 1, cellCoordinateArray[i * 2 + 1] - 1])
+            .ToArray().Sum() == result);
 
         // izveido ierobežojumu, lai visi cipari ir dažādi
         solver.Add((from j in Enumerable.Range(0, len)
-                    select matrix[cellCoordinateArray[j * 2] - 1, cellCoordinateArray[j * 2 + 1] - 1])
-                    .ToArray().AllDifferent());
+            select matrix[cellCoordinateArray[j * 2] - 1, cellCoordinateArray[j * 2 + 1] - 1])
+            .ToArray().AllDifferent());
     }
 
     private static void Solve()
     {
-        
+
 
         Solver solver = new Solver("Kakuro"); //Deklarē klasi, kurā ietilpst OR-Tools metodes
+        
         /************* .CSV INTEGRĀCIJA *************/
-
-        //Console.WriteLine("Enter file name:");
-        // string fileName = Console.ReadLine();
 
         int rowCounter = 0;
         int columnCounter = 1;
 
-        // Read the file and display it line by line.  
+        // Pārbauda faila pieejamību
         string textFile = new string(@"../../../" + FileName);
+        if (!File.Exists(textFile))
+        {
+            Console.WriteLine("T-01a. Nevar atrast failu ar nosaukumu \"{0}\"", FileName);
+            return;
+        }
+        Console.WriteLine("T-01b. Fails ar nosaukumu \"{0}\" ir atrasts un tiek apstrādāts\n", FileName);
+
         string[] lines = File.ReadAllLines(textFile);
-        //if (File.Exists(textFile))
-        //{
+
         foreach (string line in lines)
         {
             Console.WriteLine(line);
@@ -98,7 +102,7 @@ public class Kakuro
 
         foreach (char c in lines[0])
             if (c == ListSeparator) columnCounter++; //svarīgi windows uzstādījumos (Control Panel - Region - Advanced - List Separator)
-        //}
+        Console.Write("T-02. Mīklas izmēri ir atrasti, un tie ir {0}x{1}\n", rowCounter, columnCounter);
         //izveido teksta matricu, kur glabāsies .csv dati
         string[][] stringMatrix = new string[rowCounter][];
         for (int i = 0; i < stringMatrix.GetLength(0); i++)
@@ -149,7 +153,7 @@ public class Kakuro
             }
             Console.WriteLine();//matricas nākamā rinda
         }
-        Console.WriteLine("Horizontālās summas OK\n");
+        Console.WriteLine("T-03a. Horizontālās summas nolasītas.\n");
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
@@ -158,7 +162,7 @@ public class Kakuro
             }
             Console.WriteLine();
         }
-        Console.WriteLine("Vertikālās summas OK\n");
+        Console.WriteLine("T-03b. Vertikālās summas nolasītas.\n");
         //ieraksta summas vienā sarakstā, secībā H,V
         List<int> sumList = new List<int>();
         for (int i = 0; i < rowCounter; i++)
@@ -172,7 +176,7 @@ public class Kakuro
                 }
             }
         }
-        for (int j = 0; j < columnCounter; j++) 
+        for (int j = 0; j < columnCounter; j++)
         {
             for (int i = 0; i < rowCounter; i++)
             {
@@ -217,9 +221,8 @@ public class Kakuro
         {
             for (int j = 0; j < columnCounter; j++)
             {
-                if (stringMatrix[i][j] == "") //ja ir balta
+                if (stringMatrix[i][j] == "")
                 {
-                    //mainīgie, kurus varēs mainīt
                     int i_var = i;
                     int j_var = j;
                     while ((verticalSumMatrix[i_var, j_var] == 0) && (stringMatrix[i_var][j_var] == ""))
@@ -228,23 +231,26 @@ public class Kakuro
                     }
                     if (verticalSumMatrix[i_var, j_var] != 0)
                         CellVerticalSumLink[i, j] = verticalSumMatrix[i_var, j_var];
-                    //tagad 2D masīvā CellVerticalSumLink katrās baltās rūtiņas koordinātās glabājās tās horizontālā summa.
+                    //tagad 2D masīvā CellVerticalSumLink katrās baltās rūtiņas koordinātās glabājās tās vertikālā summa.
                 }
             }
         }
-        //glabās summai piederošai rūtiņu skaitu sektorā (2 līdz 9)
+        //glabās summai piederošai rūtiņu skaitu sektorā (2 līdz 9). 
+        //Saraksta izmērs vienāds ar summu saraksta izmēru.
         List<int> sectorCellCountList = new List<int>();
+        //horizontālie sektori
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
             {
+                //atrod pirmo (virzienā pa labi) balto rūtiņu, kurai pieder noteiktā horizontālā summa 
                 if (CellHorizontalSumLink[i, j] > 0)
                 {
-                    //mainīgie, kurus varēs mainīt
                     int cellCount = 0;
                     int sumLink = CellHorizontalSumLink[i, j];
-                    
                     bool doBreak = false;
+                    //iziet cauri sektoram, kamēr nav sastapti sektoram nepiederoša rūtiņa vai matricas mala.
+                    //skaita sektora garumu
                     while (!doBreak)
                     {
                         if (sumLink == CellHorizontalSumLink[i, j])
@@ -256,8 +262,8 @@ public class Kakuro
                             }
                             else doBreak = true;
                         }
-                        else 
-                        { 
+                        else
+                        {
                             doBreak = true;
                             j--;
                         }
@@ -266,20 +272,19 @@ public class Kakuro
                 }
             }
         }
-
-        
+        //vertikālie sektori
         for (int j = 0; j < columnCounter; j++)
         {
             for (int i = 0; i < rowCounter; i++)
             {
+                //atrod pirmo (virzienā no augšas uz leju) balto rūtiņu, kurai pieder noteiktā vertikālā summa
                 if (CellVerticalSumLink[i, j] > 0)
                 {
-                    //mainīgie, kurus varēs mainīt
-                    //Console.WriteLine("We are at {0} column and found first white cell on {1} row", j, i);
                     int cellCount = 0;
                     int sumLink = CellVerticalSumLink[i, j];
-
                     bool doBreak = false;
+                    //iziet cauri sektoram, kamēr nav sastapti sektoram nepiederoša rūtiņa vai matricas mala.
+                    //skaita sektora garumu
                     while (!doBreak)
                     {
                         if (sumLink == CellVerticalSumLink[i, j])
@@ -297,7 +302,6 @@ public class Kakuro
                             i--;
                         }
                     }
-                    //Console.WriteLine("We are at {0} column and end on {1} row", j, i);
                     sectorCellCountList.Add(cellCount);
                 }
             }
@@ -315,6 +319,7 @@ public class Kakuro
                 }
             }
         }
+        //vertikālās koordinātas
         for (int j = 0; j < columnCounter; j++)
         {
             for (int i = 0; i < rowCounter; i++)
@@ -324,12 +329,12 @@ public class Kakuro
                     WhiteCellCoordinatesInOrder.Add(i);
                     WhiteCellCoordinatesInOrder.Add(j);
                 }
-
             }
         }
         Console.WriteLine();
-        Console.WriteLine("Failā {0} rindas un {1} kolonnas, {2} horizontālas un {3} vertikālas summas", rowCounter, columnCounter, horizontalSumCount, verticalSumCount);
-        Console.WriteLine("Kopā ir {0} baltas koordinātas\n", WhiteCellCoordinatesInOrder.Count);
+        Console.WriteLine("Failā ir {0} horizontālas un {1} vertikālas summas", horizontalSumCount, verticalSumCount);
+        //Tā kā katr
+        Console.WriteLine("T-05. Kopā ir {0} baltas rūtiņas*.\n", WhiteCellCoordinatesInOrder.Count / 2);
         //pārbauda balto rūtiņu piesaisti pie summas
         for (int i = 0; i < rowCounter; i++)
         {
@@ -339,7 +344,7 @@ public class Kakuro
             }
             Console.WriteLine();
         }
-        Console.WriteLine("horizontalSumLink OK\n");
+        Console.WriteLine("T-06a. Balto rūtiņu piesaiste pie horizontālās summas ir veiksmīga.\n");
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
@@ -348,19 +353,19 @@ public class Kakuro
             }
             Console.WriteLine();
         }
-        Console.WriteLine("verticalSumLink OK\n");
+        Console.WriteLine("T-06b. Balto rūtiņu piesaiste pie vertikālās summas ir veiksmīga.\n");
 
         foreach (int sector in sectorCellCountList)
         {
             Console.Write(sector + " ");
         }
         Console.WriteLine();
-        Console.WriteLine("sectors OK\n"); 
+        Console.WriteLine("T-07. Sektoru garumi ir saskaitīti veiksmīgi.\n");
 
         int sumCount = sumList.Count;
+        //datu formatēšana
         int[][] problem_autoFill = new int[sumCount][];
-        int coordinatesWalker = 0;
-        Console.WriteLine("inicializēts masīvs ar problēmu OK\n");
+        int coordinatesWalker = 0; //izstaigās visas balto rūtiņu koordinātes (glabāts lineāri WhiteCellCoordinatesInOrder) un kopēs tos vajadzīgajā sektorā problēmā 
         //visas horizontālās rindas problēmā. šajā sintaksē ir vienkāršākais veids pielagoties OR-Tools metodēm, nododot datus. 
         for (int i = 0; i < horizontalSumCount; i++)
         {
@@ -380,7 +385,7 @@ public class Kakuro
             }
             Console.WriteLine();
         }
-        Console.WriteLine("ievadītas {0} horizontālas summas ar koordinātēm OK\n", horizontalSumCount);
+        Console.WriteLine("T-08a. Ievadītas {0} horizontālās summas ar sektora rūtiņu koordinātām\n", horizontalSumCount);
         //visas vertikālas rindas problēmā
         for (int i = horizontalSumCount; i < sumCount; i++)
         {
@@ -400,24 +405,23 @@ public class Kakuro
             }
             Console.WriteLine();
         }
-        Console.WriteLine("ievadītas {0} vertikālās summas ar koordinātēm OK\n", verticalSumCount);
-        Console.WriteLine("Aizpildīts masīvs ar problēmu OK\n");
-        //visi tukšumi
+        Console.WriteLine("T-08b. Ievadītas {0} vertikālās summas ar sektora rūtiņu koordinātām\n", verticalSumCount);
+        //visi tukšumi -> summas un melnās rūtiņas
         int blanksCount = 0;
         for (int i = 1; i < rowCounter; i++)
         {
             for (int j = 1; j < columnCounter; j++)
             {
-                if ((stringMatrix[i][j] == BlankSymbol)||(stringMatrix[i][j].Contains(@"\")))
+                if ((stringMatrix[i][j] == BlankSymbol) || (stringMatrix[i][j].Contains(@"\")))
                     blanksCount++;
             }
         }
-        int[,] blanksCoordinatesArray = new int[blanksCount,2];
+        int[,] blanksCoordinatesArray = new int[blanksCount, 2];
         int blankRows = 0;
         int blankCols = 0;
         for (int i = 1; i < rowCounter; i++)
         {
-            for (int j =1 ; j < columnCounter; j++)
+            for (int j = 1; j < columnCounter; j++)
             {
                 if ((stringMatrix[i][j] == BlankSymbol) || (stringMatrix[i][j].Contains(@"\")))
                 {
@@ -429,100 +433,35 @@ public class Kakuro
                 }
             }
         }
-        Console.WriteLine("Blanks:");
+        //pārbauda, vai tukšumi (melnās un summu rūtiņas) ir atrasti
         for (int i = 0; i < blanksCount; i++)
         {
             for (int j = 0; j < 2; j++)
             {
-                Console.Write(blanksCoordinatesArray[i, j]+" ");
+                Console.Write(blanksCoordinatesArray[i, j] + " ");
             }
             Console.WriteLine();
         }
-        Console.WriteLine("Blanks OK\n");
-        
-        for (int i =0;i< problem_autoFill.GetLength(0);i++)
-        {
-            for (int j = 0; j < problem_autoFill[i].GetLength(0); j++)
-            {
-                Console.Write("{0} ",problem_autoFill[i][j]);
-            }
-            Console.WriteLine();
-        }
+        Console.WriteLine("T-09. Tukšumi ir nolasīti\n");
 
-        Console.WriteLine("ProblemRead OK\n");
-        /************* DOTS LAUKS: *************/
+        int count_sectors = problem_autoFill.GetLength(0);
 
-        /*
-         * Programma risina problēmu, kas ir aprakstīta
-         * Wikipēdijas lapā. https://en.wikipedia.org/wiki/Kakuro
-         * Šajā koda sadaļā kakuro piemērs - lauks - ievadīts manuāli
-        */
-
-        // matricas izmērs, neskaitot summas kreisajā kolonnā un augšajā rindā
-        int n = 7; //rindas
-        int m = 7; //kolonnas
-
-        // segmenti:
-        // formāts: {summa, segmentu koordinātas (rinda,kolonna)}
-        // Sākot ar 1.
-        int[][] problem =
-        {
-            new int[] {16,  1,1, 1,2},
-            new int[] {24,  1,5, 1,6, 1,7},
-            new int[] {17,  2,1, 2,2},
-            new int[] {29,  2,4, 2,5, 2,6, 2,7},
-            new int[] {35,  3,1, 3,2, 3,3, 3,4, 3,5},
-            new int[] { 7,  4,2, 4,3},
-            new int[] { 8,  4,5, 4,6},
-            new int[] {16,  5,3, 5,4, 5,5, 5,6, 5,7},
-            new int[] {21,  6,1, 6,2, 6,3, 6,4},
-            new int[] { 5,  6,6, 6,7},
-            new int[] { 6,  7,1, 7,2, 7,3},
-            new int[] { 3,  7,6, 7,7},
-
-            new int[] {23,  1,1, 2,1, 3,1},
-            new int[] {30,  1,2, 2,2, 3,2, 4,2},
-            new int[] {27,  1,5, 2,5, 3,5, 4,5, 5,5},
-            new int[] {12,  1,6, 2,6},
-            new int[] {16,  1,7, 2,7},
-            new int[] {17,  2,4, 3,4},
-            new int[] {15,  3,3, 4,3, 5,3, 6,3, 7,3},
-            new int[] {12,  4,6, 5,6, 6,6, 7,6},
-            new int[] { 7,  5,4, 6,4},
-            new int[] { 7,  5,7, 6,7, 7,7},
-            new int[] {11,  6,1, 7,1},
-            new int[] {10,  6,2, 7,2}
-        };
-
-
-        //int count_segm = problem.GetLength(0); // Segmentu skaits, jeb summu skaits
-        int count_segm = problem_autoFill.GetLength(0);
-
-        // Tukšumi, tai skaitā arī summas rūtiņās.
-        // Sākas ar 1
-        int[,] blanks = {
-            {1,3}, {1,4},
-            {2,3},
-            {3,6}, {3,7},
-            {4,1}, {4,4}, {4,7},
-            {5,1}, {5,2},
-            {6,5},
-            {7,4}, {7,5}
-        };
-
-        //int count_blanks = blanks.GetLength(0);
         int count_blanks = blanksCoordinatesArray.GetLength(0);
 
         /************** RISINĀJUMA KODS: **************/
+        
         /*
-         * Decision variables
+         * Risinājuma plāns ir ņemts no OR-Tools instrukcijas priekš ierobežojumu programmēšanas
+         * https://developers.google.com/optimization/cp/cp_solver
          */
-        IntVar[,] matrix = solver.MakeIntVarMatrix(rowCounter-1, columnCounter-1, 0, 9, "matrix");
+
+        /** Variables **/
+
+        //matricai izņem 0-to rindu un 0-to kolonnu, jo tajās pēc Kakuro noteikumiem nevar būt baltas rūtiņas 
+        IntVar[,] matrix = solver.MakeIntVarMatrix(rowCounter - 1, columnCounter - 1, 0, 9, "matrix");
         IntVar[] matrix_flat = matrix.Flatten();
 
-        /*
-         * Constraints
-         */
+        /**Constraints**/
 
         // ieliek tukšumos 0
         for (int i = 0; i < count_blanks; i++)
@@ -532,7 +471,7 @@ public class Kakuro
         }
 
         //Katram no sektoriem ir sekojošie nosacījumi
-        for (int i = 0; i < count_segm; i++)
+        for (int i = 0; i < count_sectors; i++)
         {
             // Katrs sektors ir viena daļa no problēmas 2D masīva
             int[] sector = problem_autoFill[i];
@@ -549,25 +488,22 @@ public class Kakuro
             // funkcija izveido kakuro constraint'us
             calc(solver, s2, matrix, sector[0]);
         }
+        //ieraksta laiku, kurā atrod un izdrukā risinājumu(s)
         var watch = new System.Diagnostics.Stopwatch();
         watch.Start();
-        /*
-         * Solver.Search
-         */
-        DecisionBuilder db = solver.MakePhase(matrix_flat,
-                                              Solver.CHOOSE_FIRST_UNBOUND,
-                                              Solver.ASSIGN_MIN_VALUE);
 
+        /**Solver.Search**/
+
+        DecisionBuilder db = solver.MakePhase(matrix_flat, Solver.CHOOSE_FIRST_UNBOUND, Solver.ASSIGN_MIN_VALUE);
         solver.NewSearch(db);
-        
-        /*
-         * Output
-         */
+
+        /** Output **/
+
         while (solver.NextSolution())
         {
-            for (int i = 0; i < rowCounter-1; i++)
+            for (int i = 0; i < rowCounter - 1; i++)
             {
-                for (int j = 0; j < columnCounter-1; j++)
+                for (int j = 0; j < columnCounter - 1; j++)
                 {
                     int value = (int)matrix[i, j].Value();
                     if (value > 0)
@@ -579,7 +515,7 @@ public class Kakuro
                         Console.Write("  ");
                     }
                 }
-                Console.WriteLine(); //pēc katra i
+                Console.WriteLine(); //pēc katra i, jaunā rinda matricā
             }
             Console.WriteLine(); //pēc katra Solution
         }
@@ -589,16 +525,18 @@ public class Kakuro
         Console.WriteLine("Iespējamo risinājumu: {0}", solver.Solutions());
         watch.Stop();
         Console.WriteLine("Risinājuma meklēšanas un attēlošanas laiks: {0} ms", watch.ElapsedMilliseconds);
-        Console.WriteLine("Kopējais koda laiks, ieskaitot vienībtestēšanu: {0}ms", solver.WallTime());
-        Console.WriteLine("Kļūdas risinājuma meklēšanā: {0}", solver.Failures());
+        Console.WriteLine("Kopējais koda laiks, ieskaitot vienībtestēšanu: {0} ms", solver.WallTime());
+        Console.WriteLine("Strupceļu skaits risinājuma kokā: {0}", solver.Failures());
         Console.WriteLine("Zaru skaits risinājuma kokā: {0} ", solver.Branches());
-        
+
         solver.EndSearch(); //svarīgi neaizmirst
-        
+        if (solver.Solutions() == 0)
+            Console.WriteLine("\nDiemžēl nav atrasta neviena risinājuma!");
     }
 
     public static void Main(String[] args)
     {
+        Console.WriteLine("Programmai ir ");
         Solve();
     }
 }
