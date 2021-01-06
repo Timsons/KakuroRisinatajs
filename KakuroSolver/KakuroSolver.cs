@@ -11,7 +11,7 @@
  * Versija v1.2. Pilnveidota strādājoša saite ar .csv failu. paliek savienot ar esošo algoritmu-piemēru.
  * Datums: 22.12.2020.
  * 
- * Versija v2.0. Pilnībā strādājošs minimālais produkts ar jebkuru Kakuro piemēru. Gatavs aizstāvēšanai
+ * Versija v2.0. Pilnībā strādājošs minimālais produkts ar jebkuru Kakuro piemēru. 
  * Datums: 31.12.2020.
  * 
  * Par Kakuro (angliski): https://en.wikipedia.org/wiki/Kakuro
@@ -41,9 +41,7 @@ using Google.OrTools.ConstraintSolver;
 public class Kakuro
 {
 
-    const char ListSeparator = ',';
-    const string FileName = "Kakuro10x9.csv";
-    const string BlankSymbol = "x";
+    
 
 
     /*
@@ -63,21 +61,21 @@ public class Kakuro
 
         // izveido ierobežojumu, lai skaitļu summa ir vienāda ar doto mīklā
         solver.Add((from i in Enumerable.Range(0, len)
-            select matrix[cellCoordinateArray[i * 2] - 1, cellCoordinateArray[i * 2 + 1] - 1])
+                    select matrix[cellCoordinateArray[i * 2] - 1, cellCoordinateArray[i * 2 + 1] - 1])
             .ToArray().Sum() == result);
 
         // izveido ierobežojumu, lai visi cipari ir dažādi
         solver.Add((from j in Enumerable.Range(0, len)
-            select matrix[cellCoordinateArray[j * 2] - 1, cellCoordinateArray[j * 2 + 1] - 1])
+                    select matrix[cellCoordinateArray[j * 2] - 1, cellCoordinateArray[j * 2 + 1] - 1])
             .ToArray().AllDifferent());
     }
 
-    private static void Solve()
+    private static void Solve(char ListSeparator, string FileName, string BlankSymbol)
     {
-
-
+        var watch = new System.Diagnostics.Stopwatch();
+        watch.Start();
         Solver solver = new Solver("Kakuro"); //Deklarē klasi, kurā ietilpst OR-Tools metodes
-        
+
         /************* .CSV INTEGRĀCIJA *************/
 
         int rowCounter = 0;
@@ -449,7 +447,7 @@ public class Kakuro
         int count_blanks = blanksCoordinatesArray.GetLength(0);
 
         /************** RISINĀJUMA KODS: **************/
-        
+
         /*
          * Risinājuma plāns ir ņemts no OR-Tools instrukcijas priekš ierobežojumu programmēšanas
          * https://developers.google.com/optimization/cp/cp_solver
@@ -489,8 +487,8 @@ public class Kakuro
             calc(solver, s2, matrix, sector[0]);
         }
         //ieraksta laiku, kurā atrod un izdrukā risinājumu(s)
-        var watch = new System.Diagnostics.Stopwatch();
-        watch.Start();
+        var watch2 = new System.Diagnostics.Stopwatch();
+        watch2.Start();
 
         /**Solver.Search**/
 
@@ -523,9 +521,10 @@ public class Kakuro
 
         //Risinājuma statistika
         Console.WriteLine("Iespējamo risinājumu: {0}", solver.Solutions());
+        watch2.Stop();
+        Console.WriteLine("Risinājuma meklēšanas un attēlošanas laiks: {0} ms", watch2.ElapsedMilliseconds);
         watch.Stop();
-        Console.WriteLine("Risinājuma meklēšanas un attēlošanas laiks: {0} ms", watch.ElapsedMilliseconds);
-        Console.WriteLine("Kopējais koda laiks, ieskaitot vienībtestēšanu: {0} ms", solver.WallTime());
+        Console.WriteLine("Kopējais koda laiks, ieskaitot vienībtestēšanu: {0} ms", watch.ElapsedMilliseconds);
         Console.WriteLine("Strupceļu skaits risinājuma kokā: {0}", solver.Failures());
         Console.WriteLine("Zaru skaits risinājuma kokā: {0} ", solver.Branches());
 
@@ -536,7 +535,20 @@ public class Kakuro
 
     public static void Main(String[] args)
     {
-        Console.WriteLine("Programmai ir ");
-        Solve();
+        char ListSeparator = ',';
+        string BlankSymbol = "x";
+        Console.WriteLine("Programmā nolasa .csv failu, saraksta elementus atdalot ar {0} un melnās rūtiņas iezīmējot ar {1}.", ListSeparator, BlankSymbol);
+        Console.Write("Vai tas ir pareizi? (y/n) ");
+        string ans = Console.ReadLine();
+        if (ans == "n")
+        {
+            Console.Write("Lūdzu ievadiet saraksta atdalītājsimbolu: ");
+            ListSeparator = Console.ReadLine()[0];
+            Console.Write("Lūdzu ievadiet melno rūtiņu apzīmējumu: ");
+            BlankSymbol = Console.ReadLine();
+        }
+        Console.Write("Lūdzu ievadiet .csv faila nosaukumu (piemērs - kakuro.csv): ");
+        string FileName = Console.ReadLine();
+        Solve(ListSeparator,FileName,BlankSymbol);
     }
 }
