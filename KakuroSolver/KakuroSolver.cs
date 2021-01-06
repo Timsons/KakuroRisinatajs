@@ -41,9 +41,6 @@ using Google.OrTools.ConstraintSolver;
 public class Kakuro
 {
 
-    
-
-
     /*
      * Funkcija izveido ierobežojumus
      */
@@ -550,5 +547,7 @@ public class Kakuro
         Console.Write("Lūdzu ievadiet .csv faila nosaukumu (piemērs - kakuro.csv): ");
         string FileName = Console.ReadLine();
         Solve(ListSeparator,FileName,BlankSymbol);
+        Console.WriteLine("Nospiediet jebkuru pogu, lai beigt darbu...");
+        Console.ReadKey();
     }
 }
