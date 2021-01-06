@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj": {}
+    "C:\\Users\\timur\\Desktop\\kakuroTest\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj": {}
   },
   "projects": {
-    "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj": {
+    "C:\\Users\\timur\\Desktop\\kakuroTest\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
+        "projectUniqueName": "C:\\Users\\timur\\Desktop\\kakuroTest\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
         "projectName": "Google.OrTools.KakuroSolver",
-        "projectPath": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
+        "projectPath": "C:\\Users\\timur\\Desktop\\kakuroTest\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
         "packagesPath": "C:\\Users\\timur\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\obj\\",
+        "outputPath": "C:\\Users\\timur\\Desktop\\kakuroTest\\KakuroRisinatajs\\KakuroSolver\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\timur\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -21,7 +21,7 @@
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\packages": {},
+          "C:\\Users\\timur\\Desktop\\kakuroTest\\KakuroRisinatajs\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

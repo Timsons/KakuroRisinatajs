@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9ETDe2/T3+il11cUR3VcuagHUCeks4v2HYzwKy9wtMsfxd12g5D/P0/kpSlcoJsdrS/PiadghfVjkU5ABXBN7g==",
+  "dgSpecHash": "5/vUXnqxc6HMVwZOYTqnDfZneDWGIEjPFyaU0uS8mSjKWZS7LYLvA1HOVnfmkcxT4dJMoriVV3iwjoneEeIrvw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\timur\\Desktop\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
+  "projectFilePath": "C:\\Users\\timur\\Desktop\\kakuroTest\\KakuroRisinatajs\\KakuroSolver\\KakuroSolver.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\timur\\.nuget\\packages\\google.ortools\\8.0.8283\\google.ortools.8.0.8283.nupkg.sha512",
     "C:\\Users\\timur\\.nuget\\packages\\google.ortools.runtime.win-x64\\8.0.8283\\google.ortools.runtime.win-x64.8.0.8283.nupkg.sha512",
