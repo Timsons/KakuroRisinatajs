@@ -79,13 +79,18 @@ public class Kakuro
         int columnCounter = 1;
 
         // Pārbauda faila pieejamību
-        string textFile = new string(@"../../../" + FileName);
+        string fullPath = Path.GetFullPath(FileName);
+        string startPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        string startDirectory = Path.GetDirectoryName(startPath);
+        DirectoryInfo startDirectoryInfo = Directory.GetParent(startDirectory);
+        string fileDirectory = startDirectoryInfo.Parent.Parent.FullName;
+        string textFile = new string(@fileDirectory +"\\"+ FileName);
         if (!File.Exists(textFile))
         {
-            Console.WriteLine("T-01a. Nevar atrast failu ar nosaukumu \"{0}\"", FileName);
+            Console.WriteLine("T-01a. Nevar atrast failu ar nosaukumu \"{0}\" direktorijā ({1}).", FileName, fileDirectory);
             return;
         }
-        Console.WriteLine("T-01b. Fails ar nosaukumu \"{0}\" ir atrasts un tiek apstrādāts\n", FileName);
+        Console.WriteLine("T-01b. Fails ar nosaukumu \"{0}\" direktorijā ({1}) ir atrasts un tiek apstrādāts\n", FileName, fileDirectory);
 
         string[] lines = File.ReadAllLines(textFile);
 
