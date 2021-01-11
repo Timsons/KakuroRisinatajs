@@ -1,19 +1,7 @@
 ﻿/*
  * Kakuro risinātājs ar OR-Tools palīdzību.
  * Autors: Timurs Sņetkovs ts18028
- * 
- * Versija v1.0. Minimālais produkts. Uzrakstīts risinātājs ar OR-Tools metožu palīdzību vienai dotai mīklai. Pielietota instrukcija vietnēs saistībā ar OR-Tools
- * Datums: 10.11.2020.
- * 
- * Versija v1.1. .csv faila integrēšana - mīklas matrica glabājās programmā, summas glabājās atsevišķi, tās ir sakartotas secībā visas horizontālās -> visas vertikālās.
- * Datums: 02.12.2020.
- * 
- * Versija v1.2. Pilnveidota strādājoša saite ar .csv failu. paliek savienot ar esošo algoritmu-piemēru.
- * Datums: 22.12.2020.
- * 
- * Versija v2.0. Pilnībā strādājošs minimālais produkts ar jebkuru Kakuro piemēru. 
- * Datums: 31.12.2020.
- * 
+ *  
  * Par Kakuro (angliski): https://en.wikipedia.org/wiki/Kakuro
  * 
  * Par OR-Tools: 
@@ -93,7 +81,7 @@ public class Kakuro
         Console.WriteLine("T-01b. Fails ar nosaukumu \"{0}\" direktorijā ({1}) ir atrasts un tiek apstrādāts\n", FileName, fileDirectory);
 
         string[] lines = File.ReadAllLines(textFile);
-
+        Console.WriteLine("Mīklas dati no .csv faila:");
         foreach (string line in lines)
         {
             Console.WriteLine(line);
@@ -145,6 +133,7 @@ public class Kakuro
         }
 
         //izraksta visas horizontālas summas un tad visas vertikālas
+        Console.WriteLine("Horizontālās summas matricā:");
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
@@ -154,6 +143,7 @@ public class Kakuro
             Console.WriteLine();//matricas nākamā rinda
         }
         Console.WriteLine("T-03a. Horizontālās summas nolasītas.\n");
+        Console.WriteLine("Vertikālās summas matricā:");
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
@@ -336,6 +326,7 @@ public class Kakuro
         //Tā kā katr
         Console.WriteLine("T-05. Kopā ir {0} baltas rūtiņas*.\n", WhiteCellCoordinatesInOrder.Count / 2);
         //pārbauda balto rūtiņu piesaisti pie summas
+        Console.WriteLine("Balto rūtiņu vietā ierakstītas tām piederošas horizontālās summas:");
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
@@ -345,6 +336,7 @@ public class Kakuro
             Console.WriteLine();
         }
         Console.WriteLine("T-06a. Balto rūtiņu piesaiste pie horizontālās summas ir veiksmīga.\n");
+        Console.WriteLine("Balto rūtiņu vietā ierakstītas tām piederošas vertikālās summas:");
         for (int i = 0; i < rowCounter; i++)
         {
             for (int j = 0; j < columnCounter; j++)
@@ -354,7 +346,7 @@ public class Kakuro
             Console.WriteLine();
         }
         Console.WriteLine("T-06b. Balto rūtiņu piesaiste pie vertikālās summas ir veiksmīga.\n");
-
+        Console.WriteLine("Sektoru garumu saraksts:");
         foreach (int sector in sectorCellCountList)
         {
             Console.Write(sector + " ");
@@ -367,6 +359,7 @@ public class Kakuro
         int[][] problem_autoFill = new int[sumCount][];
         int coordinatesWalker = 0; //izstaigās visas balto rūtiņu koordinātes (glabāts lineāri WhiteCellCoordinatesInOrder) un kopēs tos vajadzīgajā sektorā problēmā 
         //visas horizontālās rindas problēmā. šajā sintaksē ir vienkāršākais veids pielagoties OR-Tools metodēm, nododot datus. 
+        Console.WriteLine("Visas horizontālās {summa, sektora rūtiņu koordinātas} struktūras:");
         for (int i = 0; i < horizontalSumCount; i++)
         {
             problem_autoFill[i] = new int[2 * sectorCellCountList[i] + 1];
@@ -387,6 +380,7 @@ public class Kakuro
         }
         Console.WriteLine("T-08a. Ievadītas {0} horizontālās summas ar sektora rūtiņu koordinātām\n", horizontalSumCount);
         //visas vertikālas rindas problēmā
+        Console.WriteLine("Visas vertikālās {summa, sektora rūtiņu koordinātas} struktūras:");
         for (int i = horizontalSumCount; i < sumCount; i++)
         {
             problem_autoFill[i] = new int[2 * sectorCellCountList[i] + 1];
@@ -434,15 +428,16 @@ public class Kakuro
             }
         }
         //pārbauda, vai tukšumi (melnās un summu rūtiņas) ir atrasti
+        Console.WriteLine("Tukšumu koordinātas (neskaitot 0. rindu un kolonnu):");
         for (int i = 0; i < blanksCount; i++)
         {
             for (int j = 0; j < 2; j++)
             {
                 Console.Write(blanksCoordinatesArray[i, j] + " ");
             }
-            Console.WriteLine();
+            Console.Write("| ");
         }
-        Console.WriteLine("T-09. Tukšumi ir nolasīti\n");
+        Console.WriteLine("\nT-09. Tukšumi ir nolasīti\n");
 
         int count_sectors = problem_autoFill.GetLength(0);
 
@@ -498,7 +493,7 @@ public class Kakuro
         solver.NewSearch(db);
 
         /** Output **/
-
+        Console.WriteLine("Iespējamie risinājumi:");
         while (solver.NextSolution())
         {
             for (int i = 0; i < rowCounter - 1; i++)
